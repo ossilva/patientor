@@ -4,16 +4,18 @@ import { Patient } from "../types";
 import { Action } from "./reducer";
 
 export type State = {
+  selectedPatient: Patient | undefined;
   patients: { [id: string]: Patient };
 };
 
 const initialState: State = {
-  patients: {}
+  selectedPatient: undefined,
+  patients: {},
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([
   initialState,
-  () => initialState
+  () => initialState,
 ]);
 
 type StateProviderProps = {
@@ -23,7 +25,7 @@ type StateProviderProps = {
 
 export const StateProvider: React.FC<StateProviderProps> = ({
   reducer,
-  children
+  children,
 }: StateProviderProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
