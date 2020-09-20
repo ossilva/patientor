@@ -9,7 +9,24 @@ export type Action =
   | {
       type: "ADD_PATIENT";
       payload: Patient;
-    };
+    }
+  | {
+      type: "SET_SELECTED_PATIENT";
+      payload: Patient;
+  };
+
+
+export const addNewPatient = (patient: Patient): Action => {
+  return { type: "ADD_PATIENT", payload: patient };
+};
+
+export const setPatientList = (patientList: Patient[]): Action => {
+  return { type: "SET_PATIENT_LIST", payload: patientList };
+};
+
+export const setSelectedPatient = (matchedPatient: Patient): Action => {
+  return { type: "SET_SELECTED_PATIENT", payload: matchedPatient };
+};
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -21,16 +38,21 @@ export const reducer = (state: State, action: Action): State => {
             (memo, patient) => ({ ...memo, [patient.id]: patient }),
             {}
           ),
-          ...state.patients
-        }
+          ...state.patients,
+        },
       };
     case "ADD_PATIENT":
       return {
         ...state,
         patients: {
           ...state.patients,
-          [action.payload.id]: action.payload
-        }
+          [action.payload.id]: action.payload,
+        },
+      };
+    case "SET_SELECTED_PATIENT":
+      return {
+        ...state,
+        selectedPatient: action.payload
       };
     default:
       return state;
