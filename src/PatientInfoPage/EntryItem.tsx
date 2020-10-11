@@ -31,7 +31,7 @@ export const EntryItem: React.FC<SelectItemProps> = ({ entry }) => {
         {diagnosisCodes && diagnosisCodes.length && (
           <ul>
             {diagnosisCodes.map((c, i) => (
-              <li className="entryInfo" key={i} >
+              <li key={i} >
                 {c} {diagnoses[c]?.name}
               </li>
             ))}
