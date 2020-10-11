@@ -5,8 +5,8 @@ import { Button, Divider, Header, Container } from "semantic-ui-react";
 
 import { apiBaseUrl } from "./constants";
 import { useStateValue } from "./state";
-import { setPatientList } from "./state/reducer"
-import { Patient } from "./types";
+import { setPatientList, setDiagnoses } from "./state/reducer";
+import { Diagnosis, Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
 import PatientInfoPage from "./PatientInfoPage";
@@ -26,7 +26,19 @@ const App: React.FC = () => {
         console.error(e);
       }
     };
+
+    const fetchDiagnoses = async () => {
+      try {
+        const { data: diagnosesFromApi } = await axios.get<Diagnosis[]>(
+          `${apiBaseUrl}/diagnoses`
+        );
+        dispatch(setDiagnoses(diagnosesFromApi));
+      } catch (e) {
+        console.error(e);
+      }
+    };
     fetchPatientList();
+    fetchDiagnoses();
   }, [dispatch]);
 
   return (
@@ -39,8 +51,8 @@ const App: React.FC = () => {
           </Button>
           <Divider hidden />
           <Switch>
-            <Route path="/patients/:id" render={() => (<PatientInfoPage />)}/>
-            <Route path="/" render={() => (<PatientListPage />)}/>
+            <Route path="/patients/:id" render={() => <PatientInfoPage />} />
+            <Route path="/" render={() => <PatientListPage />} />
           </Switch>
         </Container>
       </Router>
